@@ -1,14 +1,19 @@
 package model;
 
 import java.util.*;
+
 public class Order {
 
     private String buyerName;
-    private ArrayList<Product> productList;
-    private double totalPrice;
-    private Calendar date;
+    private final ArrayList<Product> productList;
+    private final double totalPrice;
+    private final Calendar date;
 
-    public Order(String buyerName, ArrayList<Product> productList, double totalPrice) {
+    public Order(
+            String buyerName,
+            ArrayList<Product> productList,
+            double totalPrice
+    ) {
         this.buyerName = buyerName;
         this.productList = productList;
         this.totalPrice = totalPrice;
@@ -28,11 +33,10 @@ public class Order {
     }
 
     public double getTotalPrice() {
-        return totalPrice; //Para que se de el precio total, se deben sumar los precios de cada producto
+        return totalPrice; //For the total price to be given, the prices of each product must be added
     }
 
     public Calendar getDate() {
         return date;
     }
-
 }
