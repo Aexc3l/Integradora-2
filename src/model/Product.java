@@ -71,4 +71,8 @@ public class Product {
     public void increaseTimesPurchased() {
         this.timesPurchased++;
     }
+
+    public void decreaseTimesPurchased() {
+        this.timesPurchased--;
+    }
 }

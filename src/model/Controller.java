@@ -31,42 +31,33 @@ public class Controller {
         productList.add(product);
     }
 
+    public boolean removeProduct(String name) {
+        int i = getProductIndexByName(name);
+        if (i != -1) {
+            productList.remove(i);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void addOrder(String buyerName, ArrayList<String> productNames) {
         ArrayList<Product> orderedProducts = new ArrayList<>();
 
-        //Read the product array, check that the name exists, and add the product to the order product array
+        for (String productName : productNames) {
+            try {
+                Product product = getProductByName(productName);
+                orderedProducts.add(product);
+            } catch (Exception e) {
+                System.out.println("Product not found: " + productName);
+            }
+        }
 
         double totalPrice = calculateTotalPrice(orderedProducts);
         Order order = new Order(buyerName, orderedProducts, totalPrice);
         orderList.add(order);
 
-        updateProductQuantities(orderedProducts);
-    }
-
-    private Product getProductByName(String name) {
-        for (Product product : productList) {
-            if (product.getName().equals(name)) {
-                return product;
-            }
-        }
-        return null;
-    }
-
-    private double calculateTotalPrice(ArrayList<Product> products) {
-        double totalPrice = 0;
-        for (Product pr : products) {
-            totalPrice += searchProductValue(pr.getName());
-        }
-        return totalPrice;
-    }
-
-    private double searchProductValue(String name) {
-        for (Product pr : productList) {
-            if (pr.getName().equals(name)) {
-                return pr.getPrice();
-            }
-        }
-        return 0;
+        updateProductQuantities(orderedProducts, 1, 0);
     }
 
     /*Search engines to implement Binary Search
@@ -76,14 +67,6 @@ public class Controller {
      * binarySearchProductsByTimesPurchased
      * binarySearchOrdersByBuyerName
      * binarySearchOrdersByPrice*/
-
-    private void updateProductQuantities(ArrayList<Product> orderedProducts) {
-        //Every time a product is found in an order, the available quantity of that product is updated (Decreases)
-    }
-
-    public ArrayList<Product> getProductList() {
-        return productList;
-    }
 
     public void exportData(String fileName) {
         File projectDir = new File(System.getProperty("user.dir"));
@@ -136,7 +119,12 @@ public class Controller {
             for (Order order : data.getOrders()) {
                 ArrayList<Product> orderedProducts = new ArrayList<>();
                 for (Product productData : order.getProductList()) {
-                    Product product = getProductByName(productData.getName());
+                    Product product = null;
+                    try {
+                        product = getProductByName(productData.getName());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e); //Replace with Custom Exception
+                    }
                     if (product != null) {
                         orderedProducts.add(product);
                     }
@@ -148,12 +136,71 @@ public class Controller {
                         totalPrice
                 );
                 orderList.add(newOrder);
-                updateProductQuantities(orderedProducts);
+                updateProductQuantities(orderedProducts, 1, 0);
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("The file does not exists");
             return false;
         }
         return true;
+    }
+
+    private int getProductIndexByName(String name) {
+        for (int i = 0; i < productList.size(); i++) {
+            if (productList.get(i).getName().equals(name)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public ArrayList<Product> getProductList() {
+        return productList;
+    }
+
+    private void updateProductQuantities(
+            ArrayList<Product> orderedProducts,
+            int option,
+            int increase
+    ) {
+        for (Product product : orderedProducts) {
+            int index = getProductIndexByName(product.getName());
+            if (index != -1) {
+                Product p = productList.get(index);
+                if (option == 1) {
+                    p.decreaseQuantity(1);
+                    p.increaseTimesPurchased();
+                } else if (option == 2) {
+                    p.increaseQuantity(1);
+                    p.decreaseTimesPurchased();
+                }
+            }
+        }
+    }
+
+    private Product getProductByName(String name) throws Exception {
+        for (Product product : productList) {
+            if (product.getName().equals(name)) {
+                return product;
+            }
+        }
+        throw new Exception();//Replace with Custom Exception
+    }
+
+    private double calculateTotalPrice(ArrayList<Product> products) {
+        double totalPrice = 0;
+        for (Product pr : products) {
+            totalPrice += searchProductValue(pr.getName());
+        }
+        return totalPrice;
+    }
+
+    private double searchProductValue(String name) {
+        for (Product pr : productList) {
+            if (pr.getName().equals(name)) {
+                return pr.getPrice();
+            }
+        }
+        return 0;
     }
 }

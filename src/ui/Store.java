@@ -1,5 +1,6 @@
 package ui;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import model.Controller;
 
@@ -28,15 +29,15 @@ public class Store {
                     "\nBefore you start, Do you want to import data? \n1. Yes \n2. No"
             );
 
-            int choice = scan.nextInt();
+            int selection = scan.nextInt();
             scan.nextLine();
-            switch (choice) {
+            switch (selection) {
                 case 1 -> {
                     importData();
                     configCase = true;
                 }
                 case 2 -> configCase = true;
-                default -> System.out.println("Invalid choice.");
+                default -> System.out.println("Invalid selection.");
             }
         }
         while (!exitCase) {
@@ -63,22 +64,70 @@ public class Store {
                 case 5 -> SearchProduct();
                 case 6 -> SearchOrder();
                 case 7 -> {
-                    exportData();
-                    exitCase = true;
+                    System.out.println("Before you quit, Do you want to export your data? \n1. Yes \n2. No");
+                    int exit = scan.nextInt();
+                    scan.nextLine();
+                    switch (exit) {
+                        case 1 -> {
+                            exportData();
+                            exitCase = true;
+                        }
+                        case 2 -> exitCase = true;
+                        default -> System.out.println("Invalid selection.");
+                    }
                 }
             }
         }
     }
 
-    private void importData() {
-        System.out.println();
+    private void addProduct() {
+        System.out.println("Enter the name of the product:");
+        String name = scan.nextLine();
+
+        System.out.println("Enter the description of the product:");
+        String description = scan.nextLine();
+
+        System.out.println("Enter the price of the product:");
+        double price = scan.nextDouble();
+
+        System.out.println("Enter the quantity of the product:");
+        int quantity = scan.nextInt();
+        scan.nextLine();
+
+        System.out.println("Enter the category of the product:");
+        String category = scan.nextLine();
+
+        controller.addProduct(name, description, price, quantity, category);
+
+        System.out.println("Added Product");
     }
 
-    private void addProduct() {}
+    private void removeProduct() {
+        System.out.println("Enter the name of the product:");
+        String name = scan.nextLine();
 
-    private void removeProduct() {}
+        if (controller.removeProduct(name)){
+            System.out.println("Removed Product");
+        }else{
+            System.out.println("Something went wrong, the product could not be removed. Please try again");
+        }
+    }
 
-    private void addOrder() {}
+    private void addOrder() {
+        System.out.println("Enter buyer's name:");
+        String buyerName = scan.nextLine();
+        String productName = "";
+
+        ArrayList<String> productNames = new ArrayList<>();
+        while (!productName.equalsIgnoreCase("final")) {
+            System.out.println("Enter product name (enter 'final' if finished):");
+            productName = scan.nextLine();
+            productNames.add(productName);
+        }
+        controller.addOrder(buyerName, productNames);
+
+        System.out.println("Added Order");
+    }
 
     private void removeOrder() {}
 
@@ -86,10 +135,18 @@ public class Store {
 
     private void SearchProduct() {}
 
+    private void importData() {
+
+        System.out.println("Please write the name of your file: \n(The file must be located in the data folder) \nc) Cancel") ;
+            String fileName = scan.nextLine();
+        if (controller.importData(fileName)){
+            System.out.println("Data successfully uploaded");
+        }
+    }
+
     private void exportData() {
         System.out.println("Please write a name for your file:");
-        String fileName = scan.nextLine();
-        scan.nextLine();
+            String fileName = scan.nextLine();
 
         controller.exportData(fileName);
         System.out.println("JSON file exported successfully in data folder");
