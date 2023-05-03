@@ -2,16 +2,16 @@ package ui;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import model.Controller;
+import model.StoreManager;
 
 public class Store {
 
     private static final Store mercaLibre = new Store();
-    private static Controller controller;
+    private static StoreManager storeManager;
     private static Scanner scan;
 
     public Store() {
-        controller = new Controller();
+        storeManager = new StoreManager();
         scan = new Scanner(System.in);
     }
 
@@ -97,7 +97,7 @@ public class Store {
         System.out.println("Enter the category of the product:");
         String category = scan.nextLine();
 
-        controller.addProduct(name, description, price, quantity, category);
+        storeManager.addProduct(name, description, price, quantity, category);
 
         System.out.println("Added Product");
     }
@@ -106,7 +106,7 @@ public class Store {
         System.out.println("Enter the name of the product:");
         String name = scan.nextLine();
 
-        if (controller.removeProduct(name)){
+        if (storeManager.removeProduct(name)){
             System.out.println("Removed Product");
         }else{
             System.out.println("Something went wrong, the product could not be removed. Please try again");
@@ -124,7 +124,7 @@ public class Store {
             productName = scan.nextLine();
             productNames.add(productName);
         }
-        controller.addOrder(buyerName, productNames);
+        storeManager.addOrder(buyerName, productNames);
 
         System.out.println("Added Order");
     }
@@ -139,7 +139,7 @@ public class Store {
 
         System.out.println("Please write the name of your file: \n(The file must be located in the data folder) \nc) Cancel") ;
             String fileName = scan.nextLine();
-        if (controller.importData(fileName)){
+        if (storeManager.importData(fileName)){
             System.out.println("Data successfully uploaded");
         }
     }
@@ -148,7 +148,7 @@ public class Store {
         System.out.println("Please write a name for your file:");
             String fileName = scan.nextLine();
 
-        controller.exportData(fileName);
+        storeManager.exportData(fileName);
         System.out.println("JSON file exported successfully in data folder");
     }
 }

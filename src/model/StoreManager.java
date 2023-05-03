@@ -5,7 +5,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class Controller {
+public class StoreManager {
 
     private final ArrayList<Product> productList;
     private final ArrayList<Order> orderList;
@@ -14,7 +14,7 @@ public class Controller {
 
     //https://mvnrepository.com/artifact/com.google.code.gson/gson/2.10.1
 
-    public Controller() {
+    public StoreManager() {
         productList = new ArrayList<>();
         orderList = new ArrayList<>();
     }
@@ -48,6 +48,9 @@ public class Controller {
             try {
                 Product product = getProductByName(productName);
                 orderedProducts.add(product);
+                if (getProductByName(productName) == null){
+                    throw new Exception("Product not found: " + productName);
+                }
             } catch (Exception e) {
                 System.out.println("Product not found: " + productName);
             }
@@ -179,12 +182,17 @@ public class Controller {
     }
 
     private Product getProductByName(String name) throws Exception {
+         Product sendCoincidence = null;
         for (Product product : productList) {
             if (product.getName().equals(name)) {
-                return product;
+                sendCoincidence = product;
+                return sendCoincidence;
             }
         }
-        throw new Exception();//Replace with Custom Exception
+        if (sendCoincidence == null){
+          return null;
+        }
+            throw new Exception();
     }
 
     private double calculateTotalPrice(ArrayList<Product> products) {
