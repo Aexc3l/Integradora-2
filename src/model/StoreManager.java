@@ -2,7 +2,6 @@ package model;
 
 import com.google.gson.Gson;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class StoreManager {
@@ -83,10 +82,15 @@ public class StoreManager {
     public String searchProductsbyPrice(double value) {
         return "";
     }
-    /*Search engines to implement Binary Search
-     * binarySearchProductsByTimesPurchased
-     * binarySearchOrdersByBuyerName
-     * binarySearchOrdersByPrice*/
+
+    public String searchProductsbyAmount(int value) {
+        return "";
+    }
+
+    public String searchProductsbyPurchasedAmount(int value) {
+        return null;
+    }
+
 
     public void exportData(String fileName) {
         try {
@@ -163,4 +167,7 @@ public class StoreManager {
     }
 
 
+    public String searchProductsbyRange(double valueMin, double valueMax) {
+        return "";
+    }
 }
