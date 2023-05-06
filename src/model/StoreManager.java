@@ -178,6 +178,11 @@ public class StoreManager {
         return "";
     }
 
+    public String searchOrderbyDate(String date) {
+        Calendar calendarDate = turnToCalendar(date);
+        List<Order> matchingOrders = searchEngine.searchByOrderDate(calendarDate, "date");
+        return matchingOrders.toString();
+    }
     private static Calendar turnToCalendar(String date) {
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

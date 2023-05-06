@@ -133,14 +133,6 @@ public class SearchEngine {
         return null;
     }
 
-    public List<Order> searchByOrderDate(Calendar calendarDate, String var) {
-        variableSort(var,false);
-        ArrayList<Order> result = new ArrayList<>();
-        int low = 0;
-        int high= orderlist.size()-1;
-        return null;
-    }
-
     public List<Product> splitProductArrayList(int start, int end){
         return productlist.subList(start, end);
     }
@@ -221,6 +213,36 @@ public class SearchEngine {
             default:
                 return -1.0;
         }
+    }
+
+    public List<Order> searchByOrderDate(Calendar calendarDate, String var) {
+        variableSort(var,false);
+        ArrayList<Order> result = new ArrayList<>();
+        int low = 0;
+        int high= orderlist.size()-1;
+        while(low<=high){
+            int mid = low + (high-low)/2;
+            Calendar valueToCompare = getCalendarValueFromOrderList(mid,var);
+            if (valueToCompare.equals(calendarDate)) {
+                result.add(orderlist.get(mid));
+                int i = mid-1;
+                while (i >= 0 && getCalendarValueFromOrderList(i,var).equals(calendarDate)) {
+                    result.add(orderlist.get(i));
+                    i--;
+                }
+                i = mid + 1;
+                while (i < orderlist.size() && getCalendarValueFromOrderList(i,var).equals(calendarDate)) {
+                    result.add(orderlist.get(i));
+                    i++;
+                }
+                break;
+            } else if (calendarDate.compareTo(valueToCompare) < 0) {
+                high = mid-1;
+            } else {
+                low = mid+1;
+            }
+        }
+        return result;
     }
     private Calendar getCalendarValueFromOrderList(int index, String value){
         switch (value){
