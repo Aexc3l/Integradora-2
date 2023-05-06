@@ -77,11 +77,13 @@ public class StoreManager {
 
     public  String searchProductsbyCategory(String value){
         List<Product> matchingProducts = searchEngine.binarySearchOfProductUsingStringValue(value, "category");
-        return matchingProducts.toString();
+        return "";
+    }
+
+    public String searchProductsbyPrice(double value) {
+        return "";
     }
     /*Search engines to implement Binary Search
-     * binarySearchProductsByPrice
-     * binarySearchProductsByCategory
      * binarySearchProductsByTimesPurchased
      * binarySearchOrdersByBuyerName
      * binarySearchOrdersByPrice*/
@@ -159,4 +161,6 @@ public class StoreManager {
         }
         return 0;
     }
+
+
 }
