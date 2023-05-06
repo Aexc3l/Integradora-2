@@ -84,7 +84,13 @@ public class StoreManager {
     }
 
     public boolean importData(String fileName) {
-        return true;
+        try {
+            dataManager.importData(fileName, storeData);
+            return true;
+        } catch (FileNotFoundException ex) {
+            System.out.println("\nThe file was not found.\n");
+            return false;
+        }
     }
 
     private int getProductIndexByName(String name) {

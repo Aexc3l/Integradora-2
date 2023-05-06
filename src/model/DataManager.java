@@ -34,7 +34,7 @@ public class DataManager {
         return true;
     }
 
-    public boolean importData(String fileName, StoreData storeData) throws FileNotFoundException{
+    public StoreData importData(String fileName, StoreData storeData) throws FileNotFoundException{
 
             File projectDir = new File(System.getProperty("user.dir"));
             File dataDirectory = new File(projectDir + "/data");
@@ -86,7 +86,7 @@ public class DataManager {
                 }
                 storeData.setOrders(orderTempList);
             }
-        return true;
+        return storeData;
     }
 
     private Product getProductByName(String name, ArrayList<Product> products) throws InvalidReferenceException {

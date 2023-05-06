@@ -4,9 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.util.ArrayList;
 
-import model.Order;
-import model.Product;
-import model.StoreManager;
+import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -49,10 +47,10 @@ class PersistenceTest {
 		storeManager.addOrder("Pedro", products);
 
 		// Act
-		storeManager.exportData("ExportDataTest");
+		storeManager.exportData("ExampleDataTest");
 
 		// Assert
-		File file = new File("data/ExportDataTest.json");
+		File file = new File("data/ExampleDataTest.json");
 		assertTrue(file.exists(), "The file should exist");
 	}
 
@@ -62,10 +60,12 @@ class PersistenceTest {
 		setupStage1();
 
 		// Act
-		storeManager.importData("ExampleDataTest");
+		boolean importResult = storeManager.importData("JanethFiles");
+		int productListSize = storeManager.getProductList().size();
 
 		// Assert
-		assertNotNull(storeManager.getProductList());
+		assertFalse(importResult, "Importing the same data twice should return false");
+		assertEquals(0, productListSize, "Product list should be empty after failed import");
 	}
 
 
