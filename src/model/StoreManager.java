@@ -2,7 +2,6 @@ package model;
 
 import com.google.gson.Gson;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class StoreManager {
@@ -23,7 +22,7 @@ public class StoreManager {
         orderList = new ArrayList<>();
         storeData = new StoreData(productList, orderList);
         dataManager = new DataManager();
-        searchEngine = new SearchEngine(productList);
+        searchEngine = new SearchEngine(productList, orderList);
     }
 
     public void addProduct(
@@ -70,13 +69,13 @@ public class StoreManager {
     }
 
     public String searchProductsbyName(String value) {
-        List<Product> matchingProducts = searchEngine.binarySearchOfProductUsingStringValue(value, "name");
+        List<Product> matchingProducts = searchEngine.searchByProductString(value, "name");
         return matchingProducts.toString();
     }
 
 
     public  String searchProductsbyCategory(String value){
-        List<Product> matchingProducts = searchEngine.binarySearchOfProductUsingStringValue(value, "category");
+        List<Product> matchingProducts = searchEngine.searchByProductString(value, "category");
         return "";
     }
 
