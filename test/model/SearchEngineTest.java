@@ -20,6 +20,11 @@ class SearchEngineTest {
 		storeManager = new StoreManager();
 	}
 
+	@BeforeEach
+	void setUpStage2() {
+		storeManager = new StoreManager();
+	}
+
 	@Test
 	void searchProductsbyName() {
 		// Arrange
@@ -111,4 +116,99 @@ class SearchEngineTest {
 		assertNotEquals("",result,"No hay ningun producto con esa cantidad");
 	}
 
+	@Test
+	void searchProductsbyPurchasedAmount() {
+		// Arrange
+		setUpStage1();
+		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
+		storeManager.addProduct("Salchicha de Res","Carne Procesada",12.99,14,"Basics");
+		storeManager.addProduct("Pollo","Pollo Fresco",12.99,9,"Food");
+
+		// Act
+		String result = storeManager.searchProductsbyPurchasedAmount(129);
+		System.out.println(result);
+
+		// Assert
+		assertEquals("Product{name='Salchicha de Res', description='Carne Procesada', price=12.99, quantity=14, category='Basics', timesPurchased=0}, Product{name='Pollo', description='Pollo Fresco', price=12.99, quantity=9, category='Food', timesPurchased=0}",result,"Se muestran todos los productos menos Salchicha");
+	}
+
+	@Test
+	void searchProductsbyPurchasedAmountProduct2() {
+		// Arrange
+		setUpStage2();
+		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
+		storeManager.addProduct("Salchicha de Res","Carne Procesada",13.99,14,"Basics");
+		storeManager.addProduct("Pollo","Pollo Fresco",14.99,9,"Food");
+
+		// Act
+		String result = storeManager.searchProductsbyPurchasedAmount(12);
+		System.out.println(result);
+
+		// Assert
+		assertNotEquals("",result,"No hay ningun producto con esa cantidad");
+	}
+
+	@Test
+	void searchProductsbyAmount() {
+		// Arrange
+		setUpStage1();
+		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
+		storeManager.addProduct("Salchicha de Res","Carne Procesada",13.99,14,"Basics");
+		storeManager.addProduct("Pollo","Pollo Fresco",14.99,9,"Food");
+
+		// Act
+		String result = storeManager.searchProductsbyAmount(12);
+		System.out.println(result);
+
+		// Assert
+		assertNotEquals("",result,"No hay ningun producto con esa cantidad");
+	}
+
+	@Test
+	void searchProductsbyAmount2() {
+		// Arrange
+		setUpStage2();
+		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
+		storeManager.addProduct("Salchicha de Res","Carne Procesada",13.99,14,"Basics");
+		storeManager.addProduct("Pollo","Pollo Fresco",14.99,9,"Food");
+
+		// Act
+		String result = storeManager.searchProductsbyAmount(12);
+		System.out.println(result);
+
+		// Assert
+		assertNotEquals("",result,"No hay ningun producto con esa cantidad");
+	}
+
+	@Test
+	void searchProductsbyRangesetup1() {
+		// Arrange
+		setUpStage1();
+		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
+		storeManager.addProduct("Salchicha de Res","Carne Procesada",13.99,14,"Basics");
+		storeManager.addProduct("Pollo","Pollo Fresco",14.99,9,"Food");
+
+		// Act
+		String result = storeManager.searchProductsbyAmount(12);
+		System.out.println(result);
+
+		// Assert
+		assertNotEquals("",result,"No hay ningun producto con esa cantidad");
+	}
+
+	@Test
+	void searchProductsbyRangesetup2() {
+		// Arrange
+		setUpStage2();
+		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
+		storeManager.addProduct("Salchicha de Res","Carne Procesada",13.99,14,"Basics");
+		storeManager.addProduct("Pollo","Pollo Fresco",14.99,9,"Food");
+
+		// Act
+		String result = storeManager.searchProductsbyRange(1.99,12.00);
+		System.out.println(result);
+
+		// Assert
+		assertNotEquals("",result,"No hay ningun producto con esa cantidad");
+	}
 }
