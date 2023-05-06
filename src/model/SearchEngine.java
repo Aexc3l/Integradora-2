@@ -36,12 +36,12 @@ public class SearchEngine {
             if (valueToCompare.toLowerCase().contains(value.toLowerCase())) {
                 result.add(productlist.get(mid));
                 int i = mid-1;
-                while (i >= 0 && productlist.get(i).getName().toLowerCase().contains(value.toLowerCase())) {
+                while (i >= 0 && getStringValueFromProductList(i, var).toLowerCase().contains(value.toLowerCase())) {
                     result.add(productlist.get(i));
                     i--;
                 }
                 i = mid + 1;
-                while (i < productlist.size() && productlist.get(i).getName().toLowerCase().contains(value.toLowerCase())) {
+                while (i < productlist.size() && getStringValueFromProductList(i, var).toLowerCase().contains(value.toLowerCase())) {
                     result.add(productlist.get(i));
                     i++;
                 }
