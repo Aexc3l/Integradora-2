@@ -133,6 +133,14 @@ public class SearchEngine {
         return null;
     }
 
+    public List<Order> searchByOrderDate(Calendar calendarDate, String var) {
+        variableSort(var,false);
+        ArrayList<Order> result = new ArrayList<>();
+        int low = 0;
+        int high= orderlist.size()-1;
+        return null;
+    }
+
     public List<Product> splitProductArrayList(int start, int end){
         return productlist.subList(start, end);
     }
@@ -222,4 +230,5 @@ public class SearchEngine {
                 return null;
         }
     }
+
 }

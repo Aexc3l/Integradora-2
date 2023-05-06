@@ -2,6 +2,7 @@ package model;
 
 import com.google.gson.Gson;
 import java.io.*;
+import java.text.*;
 import java.util.*;
 
 public class StoreManager {
@@ -69,13 +70,13 @@ public class StoreManager {
     }
 
     public String searchProductsbyName(String value) {
-        List<Product> matchingProducts = searchEngine.searchByProductString(value, "name");
+        ArrayList<Product> matchingProducts = searchEngine.searchByProductString(value, "name");
         return matchingProducts.toString();
     }
 
 
     public  String searchProductsbyCategory(String value){
-        List<Product> matchingProducts = searchEngine.searchByProductString(value, "category");
+        ArrayList<Product> matchingProducts = searchEngine.searchByProductString(value, "category");
         return "";
     }
 
@@ -89,6 +90,12 @@ public class StoreManager {
 
     public String searchProductsbyPurchasedAmount(int value) {
         return null;
+    }
+
+    public String searchOrderbyName(String date) {
+        Calendar calendarDate = turnToCalendar(date);
+        List<Order> matchingOrders = searchEngine.searchByOrderDate(calendarDate, "date");
+        return matchingOrders.toString();
     }
 
 
@@ -169,5 +176,17 @@ public class StoreManager {
 
     public String searchProductsbyRange(double valueMin, double valueMax) {
         return "";
+    }
+
+    private static Calendar turnToCalendar(String date) {
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dateFormat.parse(date));
+            return calendar;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
