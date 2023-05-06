@@ -55,7 +55,7 @@ class PersistenceTest {
 	}
 
 	@Test
-	void importDataTest() {
+	void importDataTestNoExistence() {
 		// Arrange
 		setupStage1();
 
@@ -65,6 +65,20 @@ class PersistenceTest {
 
 		// Assert
 		assertFalse(importResult, "Importing the same data twice should return false");
+		assertEquals(0, productListSize, "Product list should be empty after failed import");
+	}
+
+	@Test
+	void importDataTest() {
+		// Arrange
+		setupStage1();
+
+		// Act
+		boolean importResult = storeManager.importData("Created");
+		int productListSize = storeManager.getProductList().size();
+
+		// Assert
+		assertTrue(importResult, "Importing the data  should return true");
 		assertEquals(0, productListSize, "Product list should be empty after failed import");
 	}
 

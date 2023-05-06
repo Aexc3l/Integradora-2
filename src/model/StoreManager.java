@@ -12,6 +12,8 @@ public class StoreManager {
     private Gson gson = new Gson();
     private StoreData storeData;
 
+    private SearchEngine searchEngine;
+
     private DataManager dataManager;
 
     //https://mvnrepository.com/artifact/com.google.code.gson/gson/2.10.1
@@ -21,6 +23,7 @@ public class StoreManager {
         orderList = new ArrayList<>();
         storeData = new StoreData(productList, orderList);
         dataManager = new DataManager();
+        searchEngine = new SearchEngine(productList);
     }
 
     public void addProduct(
@@ -64,11 +67,19 @@ public class StoreManager {
         Order order = new Order(buyerName, orderedProducts);
         orderList.add(order);
 
-        updateProductQuantities(orderedProducts, 1, 0);
     }
 
+    public String searchProductsbyName(String value) {
+        List<Product> matchingProducts = searchEngine.binarySearchOfProductUsingStringValue(value, "name");
+        return matchingProducts.toString();
+    }
+
+
+    public  String searchProductsbyCategory(String value){
+        List<Product> matchingProducts = searchEngine.binarySearchOfProductUsingStringValue(value, "category");
+        return matchingProducts.toString();
+    }
     /*Search engines to implement Binary Search
-     * binarySearchProductsByName
      * binarySearchProductsByPrice
      * binarySearchProductsByCategory
      * binarySearchProductsByTimesPurchased
@@ -85,7 +96,7 @@ public class StoreManager {
 
     public boolean importData(String fileName) {
         try {
-            dataManager.importData(fileName, storeData);
+            this.storeData = dataManager.importData(fileName, storeData);
             return true;
         } catch (FileNotFoundException ex) {
             System.out.println("\nThe file was not found.\n");

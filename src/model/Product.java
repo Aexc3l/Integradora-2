@@ -75,4 +75,16 @@ public class Product {
     public void decreaseTimesPurchased() {
         this.timesPurchased--;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", category='" + category + '\'' +
+                ", timesPurchased=" + timesPurchased +
+                '}';
+    }
 }
