@@ -7,6 +7,11 @@ public class StoreData {
     private ArrayList<Product> products;
     private ArrayList<Order> orders;
 
+    public StoreData(ArrayList<Product> products, ArrayList<Order> orders) {
+        this.products = products;
+        this.orders = orders;
+    }
+
     public ArrayList<Product> getProducts() {
         return products;
     }

@@ -6,17 +6,16 @@ public class Order {
 
     private String buyerName;
     private final ArrayList<Product> productList;
-    private final double totalPrice;
+    private double totalPrice;
     private final Calendar date;
 
     public Order(
             String buyerName,
-            ArrayList<Product> productList,
-            double totalPrice
+            ArrayList<Product> productList
     ) {
         this.buyerName = buyerName;
         this.productList = productList;
-        this.totalPrice = totalPrice;
+        this.totalPrice = 0;
         this.date = Calendar.getInstance();
     }
 
@@ -34,6 +33,14 @@ public class Order {
 
     public double getTotalPrice() {
         return totalPrice; //For the total price to be given, the prices of each product must be added
+    }
+
+    public void calculateTotalPrice(ArrayList<Product> products) {
+        double totalPrice = 0;
+        for (Product pr : products) {
+            totalPrice += pr.getPrice();
+        }
+        this.totalPrice = totalPrice;
     }
 
     public Calendar getDate() {

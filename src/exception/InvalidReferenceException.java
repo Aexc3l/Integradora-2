@@ -1,4 +1,4 @@
 package exception;
 
-public class InvalidReferenceException {
+public class InvalidReferenceException extends Exception{
 }

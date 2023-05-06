@@ -7,16 +7,20 @@ import java.util.*;
 
 public class StoreManager {
 
-    private final ArrayList<Product> productList;
-    private final ArrayList<Order> orderList;
+    private ArrayList<Product> productList;
+    private ArrayList<Order> orderList;
+    private Gson gson = new Gson();
+    private StoreData storeData;
 
-    private final Gson gson = new Gson();
+    private DataManager dataManager;
 
     //https://mvnrepository.com/artifact/com.google.code.gson/gson/2.10.1
 
     public StoreManager() {
         productList = new ArrayList<>();
         orderList = new ArrayList<>();
+        storeData = new StoreData(productList, orderList);
+        dataManager = new DataManager();
     }
 
     public void addProduct(
@@ -56,8 +60,8 @@ public class StoreManager {
             }
         }
 
-        double totalPrice = calculateTotalPrice(orderedProducts);
-        Order order = new Order(buyerName, orderedProducts, totalPrice);
+
+        Order order = new Order(buyerName, orderedProducts);
         orderList.add(order);
 
         updateProductQuantities(orderedProducts, 1, 0);
@@ -72,79 +76,14 @@ public class StoreManager {
      * binarySearchOrdersByPrice*/
 
     public void exportData(String fileName) {
-        File projectDir = new File(System.getProperty("user.dir"));
-        File dataDirectory = new File(projectDir + "/data");
-        File newFile = new File(dataDirectory + "/" + fileName + ".json");
-
-        if (!dataDirectory.exists()) {
-            dataDirectory.mkdirs();
-            System.out.println(dataDirectory.exists());
-        }
-
-        StoreData exportData = new StoreData();
-        exportData.setProducts(productList);
-        exportData.setOrders(orderList);
-
-        String json = gson.toJson(exportData);
-
         try {
-            FileOutputStream fos = new FileOutputStream(newFile);
-            fos.write(json.getBytes(StandardCharsets.UTF_8));
-            fos.close();
+            dataManager.exportData(fileName,storeData);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public boolean importData(String fileName) {
-        try {
-            File projectDir = new File(System.getProperty("user.dir"));
-            File dataDirectory = new File(projectDir + "/data");
-            File file = new File(dataDirectory + "/" + fileName + ".json");
-
-            FileInputStream fis = new FileInputStream(file);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
-
-            StoreData data = gson.fromJson(reader, StoreData.class);
-
-            for (Product product : data.getProducts()) {
-                productList.add(
-                        new Product(
-                                product.getName(),
-                                product.getDescription(),
-                                product.getPrice(),
-                                product.getQuantity(),
-                                product.getCategory()
-                        )
-                );
-            }
-
-            for (Order order : data.getOrders()) {
-                ArrayList<Product> orderedProducts = new ArrayList<>();
-                for (Product productData : order.getProductList()) {
-                    Product product = null;
-                    try {
-                        product = getProductByName(productData.getName());
-                    } catch (Exception e) {
-                        throw new RuntimeException(e); //Replace with Custom Exception
-                    }
-                    if (product != null) {
-                        orderedProducts.add(product);
-                    }
-                }
-                double totalPrice = calculateTotalPrice(orderedProducts);
-                Order newOrder = new Order(
-                        order.getBuyerName(),
-                        orderedProducts,
-                        totalPrice
-                );
-                orderList.add(newOrder);
-                updateProductQuantities(orderedProducts, 1, 0);
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("The file does not exists");
-            return false;
-        }
         return true;
     }
 
@@ -193,14 +132,6 @@ public class StoreManager {
           return null;
         }
             throw new Exception();
-    }
-
-    private double calculateTotalPrice(ArrayList<Product> products) {
-        double totalPrice = 0;
-        for (Product pr : products) {
-            totalPrice += searchProductValue(pr.getName());
-        }
-        return totalPrice;
     }
 
     private double searchProductValue(String name) {
