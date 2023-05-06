@@ -1,4 +1,4 @@
-package model;
+package test.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,6 +23,7 @@ class SearchEngineTest {
 	@BeforeEach
 	void setUpStage2() {
 		storeManager = new StoreManager();
+		storeManager.addProduct("Salchicha","Salchicha",10.99,10,"Food");
 	}
 
 	@Test
