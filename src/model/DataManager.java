@@ -104,7 +104,7 @@ public class DataManager {
         if (sendCoincidence == null){
             return null;
         }
-        throw new InvalidReferenceException();
+        throw new InvalidReferenceException("There are no products with this name yet");
     }
 
 

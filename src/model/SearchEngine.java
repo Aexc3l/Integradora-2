@@ -45,6 +45,7 @@ public class SearchEngine {
         ArrayList<Product> result = new ArrayList<>();
         int low = 0;
         int high= productlist.size()-1;
+
         while(low<=high){
             int mid = low + (high-low)/2;
             String valueToCompare = getStringValueFromProductList(mid, var);
@@ -100,21 +101,35 @@ public class SearchEngine {
         return result;
     }
 
-    public Product searchByProductValue(Double value, String var){
+    public ArrayList<Product> searchByProductValue(Double value, String var){
+        ArrayList<Product> result = new ArrayList<>();
         variableSort(var, true);
         int low = 0;
         int high= productlist.size()-1;
+
         while(low<=high){
             int mid = low + (high-low)/2;
             Double valueToCompare = getNumericValueFromProductList(mid, var);
-
-            if(valueToCompare!=-1){
-                if(value.compareTo(valueToCompare) > 0) low = mid+1;
-                else if(value.compareTo(valueToCompare) < 0) high = mid-1;
-                else return productlist.get(mid);
-            }else break;
+            if (valueToCompare.compareTo(value) == 0) {
+                result.add(productlist.get(mid));
+                int i = mid-1;
+                while (i >= 0 && getNumericValueFromProductList(i, var).compareTo(value) == 0) {
+                    result.add(productlist.get(i));
+                    i--;
+                }
+                i = mid + 1;
+                while (i < productlist.size() && getNumericValueFromProductList(i, var).compareTo(value) == 0) {
+                    result.add(productlist.get(i));
+                    i++;
+                }
+                break;
+            } else if (value.compareTo(valueToCompare) < 0) {
+                high = mid-1;
+            } else {
+                low = mid+1;
+            }
         }
-        return null;
+        return result;
     }
     public Order searchByOrderValue(Double value, String var){
         variableSort(var, false);
@@ -181,7 +196,7 @@ public class SearchEngine {
     private String getStringValueFromProductList(int index, String value){
         return switch (value) {
             case "name" -> productlist.get(index).getName();
-            case "category" -> productlist.get(index).getCategory().toString();
+            case "category" -> productlist.get(index).getCategory();
             default -> "";
         };
     }

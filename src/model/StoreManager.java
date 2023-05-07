@@ -1,6 +1,9 @@
 package model;
 
 import com.google.gson.Gson;
+import exception.InvalidReferenceException;
+import exception.UnvalidPriceException;
+
 import java.io.*;
 import java.text.*;
 import java.util.*;
@@ -68,19 +71,36 @@ public class StoreManager {
         orderList.add(order);
     }
 
-    public String searchProductsbyName(String value) {
+    public String searchProductsbyName(String value) throws InvalidReferenceException {
         ArrayList<Product> matchingProducts = searchEngine.searchByProductString(value, "name");
+        if (matchingProducts.size() == 0){
+            throw new InvalidReferenceException("There are no products with this name yet");
+        }
         return matchingProducts.toString();
     }
 
 
-    public  String searchProductsbyCategory(String value){
+    public  String searchProductsbyCategory(String value) throws InvalidReferenceException{
         ArrayList<Product> matchingProducts = searchEngine.searchByProductString(value, "category");
-        return "";
+        if (matchingProducts.size() == 0){
+            throw new InvalidReferenceException("There are no products with this category yet");
+        }else {
+            return matchingProducts.toString();
+        }
     }
 
-    public String searchProductsbyPrice(double value) {
-        return "";
+    public String searchProductsbyPrice(double value) throws UnvalidPriceException {
+        ArrayList<Product> matchingProducts = new ArrayList<>();
+        if (value < -1){
+            return "Error: All products prices are higher than zero";
+        }else {
+            matchingProducts = searchEngine.searchByProductValue(value, "price");
+            if (matchingProducts.size() == 0){
+                throw new UnvalidPriceException("There are no products with this price");
+            }else {
+                return matchingProducts.toString();
+            }
+        }
     }
 
     public String searchProductsbyAmount(int value) {
