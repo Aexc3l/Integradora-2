@@ -66,7 +66,6 @@ public class StoreManager {
 
         Order order = new Order(buyerName, orderedProducts);
         orderList.add(order);
-
     }
 
     public String searchProductsbyName(String value) {
@@ -101,6 +100,8 @@ public class StoreManager {
 
     public void exportData(String fileName) {
         try {
+            storeData.setOrders(orderList);
+            storeData.setProducts(productList);
             dataManager.exportData(fileName,storeData);
         } catch (IOException e) {
             e.printStackTrace();
@@ -110,6 +111,8 @@ public class StoreManager {
     public boolean importData(String fileName) {
         try {
             this.storeData = dataManager.importData(fileName, storeData);
+            this.productList = storeData.getProducts();
+            this.orderList = storeData.getOrders();
             return true;
         } catch (FileNotFoundException ex) {
             System.out.println("\nThe file was not found.\n");

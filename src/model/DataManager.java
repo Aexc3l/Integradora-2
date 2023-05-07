@@ -68,14 +68,18 @@ public class DataManager {
                 for (Order order : data.getOrders()) {
                     ArrayList<Product> orderedProducts = new ArrayList<>();
                     for (Product productData : order.getProductList()) {
-                        Product product = null;
-                        try {
-                            product = getProductByName(productData.getName(), storeData.getProducts());
-                        }catch (InvalidReferenceException e){
+                        if (productData == null){
+                            break;
+                        }else {
+                            Product product = null;
+                            try {
+                                product = getProductByName(productData.getName(), storeData.getProducts());
+                            }catch (InvalidReferenceException e){
 
-                        }
-                        if (product != null) {
-                            orderedProducts.add(product);
+                            }
+                            if (product != null) {
+                                orderedProducts.add(product);
+                            }
                         }
                     }
                     Order newOrder = new Order(
