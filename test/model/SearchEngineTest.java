@@ -214,6 +214,21 @@ class SearchEngineTest {
 	}
 
 	@Test
+	void searchOrderbyNamesetup1() {
+		// Arrange
+		setUpStage1();
+		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
+		storeManager.addProduct("Salchicha de Res","Carne Procesada",13.99,14,"Basics");
+		storeManager.addProduct("Pollo","Pollo Fresco",14.99,9,"Food");
+
+		// Act
+		String result = storeManager.searchProductsbyAmount(12);
+		System.out.println(result);
+
+		// Assert
+		assertNotEquals("",result,"No hay ningun producto con esa cantidad");
+	}
+	@Test
 	void searchOrderbyDatesetup1() {
 		// Arrange
 		setUpStage1();
