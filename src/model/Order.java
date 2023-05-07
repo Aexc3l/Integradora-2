@@ -2,7 +2,7 @@ package model;
 
 import java.util.*;
 
-public class Order extends ArrayList<Order> {
+public class Order{
 
     private String buyerName;
     private final ArrayList<Product> productList;

@@ -26,7 +26,11 @@ public class StoreManager {
         orderList = new ArrayList<>();
         storeData = new StoreData(productList, orderList);
         dataManager = new DataManager();
-        searchEngine = new SearchEngine(productList, orderList);
+        searchEngine = new SearchEngine(storeData.getProducts(),storeData.getOrders());
+    }
+
+    public void initializeSearching(){
+        searchEngine = new SearchEngine(storeData.getProducts(),storeData.getOrders());
     }
 
     public void addProduct(
@@ -39,12 +43,14 @@ public class StoreManager {
         Product product = new Product(name, description, price, quantity, category);
 
         productList.add(product);
+        storeData.setProducts(productList);
     }
 
     public boolean removeProduct(String name) {
         int i = getProductIndexByName(name);
         if (i != -1) {
             productList.remove(i);
+            storeData.setProducts(productList);
             return true;
         } else {
             return false;
@@ -69,12 +75,14 @@ public class StoreManager {
         updateProductQuantities(orderedProducts,1);
         Order order = new Order(buyerName, orderedProducts);
         orderList.add(order);
+        storeData.setOrders(orderList);
     }
 
     public boolean removeOrder(String name) {
         int i = getOrderIndexByName(name);
         if (i != -1) {
             orderList.remove(i);
+            storeData.setOrders(orderList);
             return true;
         } else {
             return false;
@@ -165,6 +173,7 @@ public class StoreManager {
             this.storeData = dataManager.importData(fileName, storeData);
             this.productList = storeData.getProducts();
             this.orderList = storeData.getOrders();
+            initializeSearching();
             return true;
         } catch (FileNotFoundException ex) {
             System.out.println("\nThe file was not found.\n");

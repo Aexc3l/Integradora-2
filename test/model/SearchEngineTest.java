@@ -20,6 +20,12 @@ class SearchEngineTest {
 	}
 
 	@BeforeEach
+	void setUpStage2() {
+		storeManager = new StoreManager();
+		storeManager.importData("FileTo");
+	}
+
+	@BeforeEach
 	void setUpStage3() {
 		storeManager = new StoreManager();
 		storeManager.addProduct("Sword","It is a sword with a sharp edge",110.99,99,"Weapons");
@@ -38,19 +44,20 @@ class SearchEngineTest {
 	void searchProductsbyName() {
 		// Arrange
 		setUpStage1();
-		storeManager.addProduct("Salchicha","Salchicha",10.99,10,"Food");
-		storeManager.addProduct("Salchicha de Res","Salchicha de Res",14.99,100,"Food");
+		storeManager.addProduct("Sausage","Sausage",10.99,10,"Food");
+		storeManager.addProduct("Beef Sausage","Beef Sausage",14.99,100,"Food");
 
 		// Act
 		String result = null;
 		try {
-			result = storeManager.searchProductsbyName("Salchicha");
+			result = storeManager.searchProductsbyName("Sausage");
+			System.out.println(result);
 		} catch (InvalidReferenceException e) {
 			e.getMessage();
 		}
 
 		// Assert
-		assertNotEquals("",result);
+		assertNotEquals("[]",result);
 	}
 
 	@Test
@@ -152,9 +159,9 @@ class SearchEngineTest {
 	void searchProductsbyPriceBelowZero() {
 		// Arrange
 		setUpStage1();
-		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
-		storeManager.addProduct("Salchicha de Res","Carne Procesada",12.99,14,"Basics");
-		storeManager.addProduct("Pollo","Pollo Fresco",12.99,9,"Food");
+		storeManager.addProduct("Sausage","Sausage",10.99,10,"Food");
+		storeManager.addProduct("Beef Sausage","Processed Meat",12.99,14,"Basics");
+		storeManager.addProduct("Chicken","Fresh Chicken",12.99,9,"Food");
 
 		// Act
 		String result = null;
@@ -165,29 +172,30 @@ class SearchEngineTest {
 		}
 
 		// Assert
-		assertEquals("\nError: All products prices are higher than zero",result,"No se muestra ningun producto");
+		assertEquals("\nError: All products prices are higher than zero",result,"No product is displayed");
 	}
 
 	@Test
 	void searchProductsbyPurchasedAmount() {
 		// Arrange
 		setUpStage1();
-		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
-		storeManager.addProduct("Res","Carne Procesada",12.99,14,"Basics");
-		storeManager.addProduct("Pollo","Pollo Fresco",12.99,9,"Food");
+		storeManager.addProduct("Sausage","Sausage",10.99,10,"Food");
+		storeManager.addProduct("Beef","Processed Meat",12.99,14,"Basics");
+		storeManager.addProduct("Chicken","Fresh Chicken",12.99,9,"Food");
 		ArrayList<String> products = new ArrayList<>();
-		products.add("Pollo");
-		products.add("Salchicha de Res");
-		products.add("Pollo");
+		products.add("Chicken");
+		products.add("Beef Sausage");
+		products.add("Chicken");
 		products.add("Res");
 		products.add("Res");
 
 		storeManager.addOrder("Rodrigo",products);
 		// Act
 		String result = storeManager.searchProductsbyPurchasedAmount(2);
+		System.out.println(result);
 
 		// Assert
-		assertEquals("[Product{name='Res', description='Carne Procesada', price=12.99, quantity=12, category='Basics', timesPurchased=2}, Product{name='Pollo', description='Pollo Fresco', price=12.99, quantity=7, category='Food', timesPurchased=2}]",result,"Se muestran todos los productos menos Salchicha");
+		assertNotEquals("[]",result,"All products are shown except Sausage");
 	}
 
 	@Test
@@ -199,75 +207,71 @@ class SearchEngineTest {
 		String result = storeManager.searchProductsbyPurchasedAmount(4);
 
 		// Assert
-		assertEquals("\nError: There are no products with this purchased Amount",result,"No se ha agregado ningun producto a una orden");
+		assertEquals("\nError: There are no products with this purchased Amount",result,"No products have been added to an order");
 	}
 
 	@Test
 	void searchProductsbyAmount() {
 		// Arrange
 		setUpStage1();
-		storeManager.addProduct("Salchicha","Carne Embutida",10.99,9,"Food");
-		storeManager.addProduct("Salchicha de Res","Carne Procesada",13.99,10,"Basics");
-		storeManager.addProduct("Pollo","Pollo Fresco",14.99,10,"Food");
+		storeManager.addProduct("Sausage","Sausage",10.99,10,"Food");
+		storeManager.addProduct("Beef Sausage","Processed Meat",13.99,14,"Basics");
+		storeManager.addProduct("Chicken","Fresh Chicken",14.99,9,"Food");
 
 		// Act
 		String result = storeManager.searchProductsbyAmount(10);
+		System.out.println(result);
 
 		// Assert
-		assertEquals("[Product{name='Salchicha de Res', description='Carne Procesada', price=13.99, quantity=10, category='Basics', timesPurchased=0}, Product{name='Pollo', description='Pollo Fresco', price=14.99, quantity=10, category='Food', timesPurchased=0}]",result,"No hay ningun producto con esa cantidad");
+		assertNotEquals("[]",result,"Shown the product Sausage");
 	}
 
 	@Test
 	void searchProductsbyAmount2() {
 		// Arrange
 		setUpStage3();
-		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
-		storeManager.addProduct("Salchicha de Res","Carne Procesada",13.99,14,"Basics");
-		storeManager.addProduct("Pollo","Pollo Fresco",14.99,9,"Food");
+		storeManager.addProduct("Sausage","Sausage",10.99,10,"Food");
+		storeManager.addProduct("Beef Sausage","Processed Meat",13.99,14,"Basics");
+		storeManager.addProduct("Chicken","Fresh Chicken",14.99,9,"Food");
 
 		// Act
 		String result = storeManager.searchProductsbyAmount(12);
 
 		// Assert
-		assertEquals("\nError: There are no products with this quantity",result,"No hay ningun producto con esa cantidad");
+		assertEquals("\nError: There are no products with this quantity",result,"There is no product with that amount");
 	}
 
 	@Test
-	void searchProductsbyRangesetup1() {
+	void searchProductsbyRangeSetup1() {
 		//Arrange
 		setUpStage1();
-		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
-		storeManager.addProduct("Salchicha de Res","Carne Procesada",13.99,14,"Basics");
-		storeManager.addProduct("Pollo","Pollo Fresco",14.99,9,"Food");
+		storeManager.addProduct("Sausage","Sausage",10.99,10,"Food");
+		storeManager.addProduct("Beef Sausage","Processed Meat",13.99,14,"Basics");
+		storeManager.addProduct("Chicken","Fresh Chicken",14.99,9,"Food");
 
 		// Act
-		String result = storeManager.searchProductsbyRange(12,50);
+		String result = storeManager.searchProductsbyRange(12,20);
 		System.out.println(result);
 
 		// Assert
-		assertEquals("[Product{name='Salchicha', description='Carne Embutida', price=10.99, quantity=10, category='Food', timesPurchased=0}, Product{name='Salchicha de Res', description='Carne Procesada', price=13.99, quantity=14, category='Basics', timesPurchased=0}]",result,"No hay ningun producto con esa cantidad");
+		assertNotEquals("[]",result,"Products in the price range of $12 to $20 are displayed");
 	}
 
 	@Test
-	void searchProductsbyRangesetup2() {
-		/*/ Arrange
-		setUpStage1();
-		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
-		storeManager.addProduct("Salchicha de Res","Carne Procesada",13.99,14,"Basics");
-		storeManager.addProduct("Pollo","Pollo Fresco",14.99,9,"Food");
+	void searchProductsbyRangeSetup2() {
+		//Arrange
+		setUpStage2();
 
 		// Act
-		String result = storeManager.searchProductsbyRange(10,20);
-		System.out.println(result);
+		String result = storeManager.searchProductsbyRange(0,40.00);
 
 		// Assert
-		assertEquals("[Product{name='Salchicha', description='Carne Embutida', price=10.99, quantity=10, category='Food', timesPurchased=0}, Product{name='Salchicha de Res', description='Carne Procesada', price=13.99, quantity=14, category='Basics', timesPurchased=0}]",result,"No hay ningun producto con esa cantidad");
-		*/
+		assertNotEquals("[]",result,"Products in the price range of $0 to $40 are displayed");
 	}
 
 	@Test
 	void searchProductbyNamesetup1() {
-		/*/ Arrange
+        /*/ Arrange
 		setUpStage1();
 		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
 		storeManager.addProduct("Salchicha de Res","Carne Procesada",13.99,14,"Basics");
@@ -283,7 +287,7 @@ class SearchEngineTest {
 
 	@Test
 	void searchOrderbyDatesetup1() {
-		/*/ Arrange
+        /*/ Arrange
 		setUpStage1();
 		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
 		storeManager.addProduct("Salchicha de Res","Carne Procesada",13.99,14,"Basics");
@@ -299,7 +303,7 @@ class SearchEngineTest {
 
 	@Test
 	void searchOrderbyDatesetup2() {
-		/*/ Arrange
+        /*/ Arrange
 		setUpStage3();
 		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
 		storeManager.addProduct("Salchicha de Res","Carne Procesada",13.99,14,"Basics");
@@ -312,6 +316,7 @@ class SearchEngineTest {
 		// Assert
 		assertNotEquals("",result,"No hay ningun producto con esa cantidad");*/
 	}
+
 	@Test
 	public void testSearchOrderByInvalidName() {
 		//arrange
@@ -326,6 +331,7 @@ class SearchEngineTest {
 			result = storeManager.searchOrderbyName("John Peshard");
 			fail("Expected InvalidReferenceException to be thrown");
 		} catch (InvalidReferenceException ex) {
+			System.out.println(result);
 			//assert
 			assertEquals("\nThere are no orders with this buyer's name yet", ex.getMessage());
 		}

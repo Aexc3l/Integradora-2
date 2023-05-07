@@ -31,7 +31,7 @@ public class SearchEngine {
     public ArrayList variableSort(String var, boolean order) {
         if(!order) {
             Collections.sort(productlist, new ProductComparator(var));
-            Collections.reverse(productlist);
+            //Collections.reverse(productlist);
             return productlist;
         }else{
             Collections.sort(orderlist, new OrderComparator(var));
@@ -131,21 +131,35 @@ public class SearchEngine {
         }
         return result;
     }
-    public Order searchByOrderValue(Double value, String var){
-        variableSort(var, false);
+    public ArrayList<Order> searchByOrderValue(Double value, String var){
+        ArrayList<Order> result = new ArrayList<>();
+        variableSort(var, true);
         int low = 0;
         int high= orderlist.size()-1;
+
         while(low<=high){
             int mid = low + (high-low)/2;
             Double valueToCompare = getNumericValueFromOrderList(mid, var);
-
-            if(valueToCompare!=-1){
-                if(value.compareTo(valueToCompare) > 0) low = mid+1;
-                else if(value.compareTo(valueToCompare) < 0) high = mid-1;
-                else return orderlist.get(mid);
-            }else break;
+            if (valueToCompare.compareTo(value) == 0) {
+                result.add(orderlist.get(mid));
+                int i = mid-1;
+                while (i >= 0 && getNumericValueFromOrderList(i, var).compareTo(value) == 0) {
+                    result.add(orderlist.get(i));
+                    i--;
+                }
+                i = mid + 1;
+                while (i < orderlist.size() && getNumericValueFromOrderList(i, var).compareTo(value) == 0) {
+                    result.add(orderlist.get(i));
+                    i++;
+                }
+                break;
+            } else if (value.compareTo(valueToCompare) < 0) {
+                high = mid-1;
+            } else {
+                low = mid+1;
+            }
         }
-        return null;
+        return result;
     }
 
     public List<Product> splitProductArrayList(int start, int end){
@@ -158,7 +172,7 @@ public class SearchEngine {
     public List<Product> searchRangeByProductValue(Double min, Double max, String var){
         int start = searchByIndexProductValue( min, var);
         int end = searchByIndexProductValue( max, var);
-        return splitProductArrayList(start, end);
+        return splitProductArrayList(start, end+1);
     }
 
     public List<Order> searchRangeByOrderValue(Double min, Double max, String var){
