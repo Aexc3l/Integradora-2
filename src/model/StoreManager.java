@@ -105,7 +105,7 @@ public class StoreManager {
 
     public String searchProductsbyPurchasedAmount(int value) {
         if (value <= 0){
-            return "Products Purchased Amount must be higher than zero";
+            return "Product's Purchased Amount must be higher than zero";
         }else {
             ArrayList<Product> matchingProducts = new ArrayList<>();
             matchingProducts = searchEngine.searchByProductValue((double) value,"timesPurchased");
@@ -119,7 +119,7 @@ public class StoreManager {
 
     public String searchProductsbyAmount(int value) {
         if (value <= 0){
-            return "Products Amount must be higher than zero";
+            return "Product's Amount must be higher than zero";
         }else {
             ArrayList<Product> matchingProducts = new ArrayList<>();
             matchingProducts = searchEngine.searchByProductValue((double) value,"quantity");
@@ -131,26 +131,44 @@ public class StoreManager {
         }
     }
 
-    public String searchProductsbyAmount(int value) {
+    public boolean removeOrder(String name) {
+        int i = getOrderIndexByName(name);
+        if (i != -1) {
+            orderList.remove(i);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String searchOrderbyPrice(double value) {
         if (value <= 0){
-            return "Products Amount must be higher than zero";
+            return "Order's Total Price must be higher than zero";
         }else {
-            ArrayList<Product> matchingProducts = new ArrayList<>();
-            matchingProducts = searchEngine.searchByProductValue((double) value,"quantity");
-            if (matchingProducts.size() == 0){
-                return "\nError: There are no products with this quantity";
+            ArrayList<Order> matchingOrders = new ArrayList<Order>();
+            matchingOrders = searchEngine.searchByOrderValue(value,"totalPrice");
+            if (matchingOrders.size() == 0){
+                return "\nError: There are no orders with this price";
             }else {
-                return matchingProducts.toString();
+                return matchingOrders.toString();
             }
         }
     }
 
-    public String searchOrderbyName(String date) {
+    public String searchOrderbyName(String value) throws InvalidReferenceException {
+        ArrayList<Order> matchingOrders = searchEngine.searchByOrderString(value, "buyerName");
+        if (matchingOrders.size() == 0){
+            throw new InvalidReferenceException("\nThere are no orders with this buyer's name yet");
+        }
+        return matchingOrders.toString();
+    }
+
+
+    public String searchOrderbyDate(String date) {
         Calendar calendarDate = turnToCalendar(date);
         List<Order> matchingOrders = searchEngine.searchByOrderDate(calendarDate, "date");
         return matchingOrders.toString();
     }
-
 
     public void exportData(String fileName) {
         try {
@@ -177,6 +195,15 @@ public class StoreManager {
     private int getProductIndexByName(String name) {
         for (int i = 0; i < productList.size(); i++) {
             if (productList.get(i).getName().equals(name)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int getOrderIndexByName(String name) {
+        for (int i = 0; i < orderList.size(); i++) {
+            if (orderList.get(i).getBuyerName().equals(name)) {
                 return i;
             }
         }
@@ -232,12 +259,6 @@ public class StoreManager {
 
     public String searchProductsbyRange(double valueMin, double valueMax) {
         return "";
-    }
-
-    public String searchOrderbyDate(String date) {
-        Calendar calendarDate = turnToCalendar(date);
-        List<Order> matchingOrders = searchEngine.searchByOrderDate(calendarDate, "date");
-        return matchingOrders.toString();
     }
     private static Calendar turnToCalendar(String date) {
         try {

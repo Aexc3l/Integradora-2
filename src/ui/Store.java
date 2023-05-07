@@ -99,7 +99,7 @@ public class Store {
 
         storeManager.addProduct(name, description, price, quantity, category);
 
-        System.out.println("Added Product");
+        System.out.println("Product added");
     }
 
     private void removeProduct() {
@@ -107,7 +107,7 @@ public class Store {
         String name = scan.nextLine();
 
         if (storeManager.removeProduct(name)){
-            System.out.println("Removed Product");
+            System.out.println("Product removed");
         }else{
             System.out.println("Something went wrong, the product could not be removed. Please try again");
         }
@@ -126,10 +126,19 @@ public class Store {
         }
         storeManager.addOrder(buyerName, productNames);
 
-        System.out.println("Added Order");
+        System.out.println("Order added");
     }
 
-    private void removeOrder() {}
+    private void removeOrder() {
+        System.out.println("Enter the name of the order's buyer: ");
+        String name = scan.nextLine();
+
+        if (storeManager.removeOrder(name)){
+            System.out.println("Order removed");
+        }else{
+            System.out.println("Something went wrong, the order could not be removed. Please try again");
+        }
+    }
 
     private void SearchOrder() {}
 
