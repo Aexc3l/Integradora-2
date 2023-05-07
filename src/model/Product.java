@@ -60,6 +60,10 @@ public class Product {
         this.category = category;
     }
 
+    public void setTimesPurchased(int timesPurchased) {
+        this.timesPurchased = timesPurchased;
+    }
+
     public void increaseQuantity(int quantity) {
         this.quantity += quantity;
     }

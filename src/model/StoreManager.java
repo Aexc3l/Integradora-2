@@ -104,17 +104,45 @@ public class StoreManager {
     }
 
     public String searchProductsbyPurchasedAmount(int value) {
-        ArrayList<Product> matchingProducts = new ArrayList<>();
-        matchingProducts = searchEngine.searchByProductValue((double) value,"timesPurchased");
-        if (matchingProducts.size() == 0){
-            return "\nError: There are no products with this purchased Amount";
+        if (value <= 0){
+            return "Products Purchased Amount must be higher than zero";
         }else {
-            return matchingProducts.toString();
+            ArrayList<Product> matchingProducts = new ArrayList<>();
+            matchingProducts = searchEngine.searchByProductValue((double) value,"timesPurchased");
+            if (matchingProducts.size() == 0){
+                return "\nError: There are no products with this purchased Amount";
+            }else {
+                return matchingProducts.toString();
+            }
         }
     }
 
     public String searchProductsbyAmount(int value) {
-        return "";
+        if (value <= 0){
+            return "Products Amount must be higher than zero";
+        }else {
+            ArrayList<Product> matchingProducts = new ArrayList<>();
+            matchingProducts = searchEngine.searchByProductValue((double) value,"quantity");
+            if (matchingProducts.size() == 0){
+                return "\nError: There are no products with this quantity";
+            }else {
+                return matchingProducts.toString();
+            }
+        }
+    }
+
+    public String searchProductsbyAmount(int value) {
+        if (value <= 0){
+            return "Products Amount must be higher than zero";
+        }else {
+            ArrayList<Product> matchingProducts = new ArrayList<>();
+            matchingProducts = searchEngine.searchByProductValue((double) value,"quantity");
+            if (matchingProducts.size() == 0){
+                return "\nError: There are no products with this quantity";
+            }else {
+                return matchingProducts.toString();
+            }
+        }
     }
 
     public String searchOrderbyName(String date) {
@@ -178,7 +206,7 @@ public class StoreManager {
         }
     }
 
-    private Product getProductByName(String name) throws Exception {
+    public Product getProductByName(String name) throws InvalidReferenceException {
          Product sendCoincidence = null;
         for (Product product : productList) {
             if (product.getName().equals(name)) {
@@ -189,7 +217,7 @@ public class StoreManager {
         if (sendCoincidence == null){
           return null;
         }
-            throw new Exception();
+            throw new InvalidReferenceException("Product does not exist");
     }
 
     private double searchProductValue(String name) {

@@ -55,6 +55,24 @@ class PersistenceTest {
 	}
 
 	@Test
+	void exportDataTestWithImportedDataAndOwnData() {
+		// Arrange
+		setupStage2();
+		ArrayList<String> products = new ArrayList<>();
+		products.add("Pollo");
+		storeManager.addProduct("Pollo", "It's chicken", 10, 10, "Food");
+		storeManager.addOrder("Pedro", products);
+		storeManager.importData("Example");
+
+		// Act
+		storeManager.exportData("Export Mixed Data");
+
+		// Assert
+		File file = new File("data/Export Mixed Data.json");
+		assertTrue(file.exists(), "The file should exist");
+	}
+
+	@Test
 	void importDataTestNoExistence() {
 		// Arrange
 		setupStage1();
@@ -74,13 +92,11 @@ class PersistenceTest {
 		setupStage1();
 
 		// Act
-		boolean importResult = storeManager.importData("Created");
+		boolean importResult = storeManager.importData("Example");
 		int productListSize = storeManager.getProductList().size();
 
 		// Assert
 		assertTrue(importResult, "Importing the data  should return true");
-		assertEquals(0, productListSize, "Product list should be empty after failed import");
+		assertEquals(20, productListSize, "Product list should have 20 products");
 	}
-
-
 }
