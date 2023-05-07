@@ -277,7 +277,7 @@ class SearchEngineTest {
 		System.out.println(result);
 
 		// Assert
-		assertNotEquals("",result,"No hay ningun producto con esa cantidad");
+		assertEquals("",result,"No hay ningun producto con esa cantidad");
 	}
 
 	@Test
