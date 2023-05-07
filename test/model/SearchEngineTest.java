@@ -251,13 +251,13 @@ class SearchEngineTest {
 	@Test
 	void searchProductsbyRangesetup2() {
 		// Arrange
-		setUpStage3();
+		setUpStage1();
 		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
 		storeManager.addProduct("Salchicha de Res","Carne Procesada",13.99,14,"Basics");
 		storeManager.addProduct("Pollo","Pollo Fresco",14.99,9,"Food");
 
 		// Act
-		String result = storeManager.searchProductsbyRange(1.99,12.00);
+		String result = storeManager.searchProductsbyRange(10,20);
 		System.out.println(result);
 
 		// Assert

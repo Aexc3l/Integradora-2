@@ -131,7 +131,7 @@ public class SearchEngine {
         }
         return result;
     }
-    public ArrayList<Order> searchByOrderValue(Double value, String var){
+    public Order searchByOrderValue(Double value, String var){
         variableSort(var, false);
         int low = 0;
         int high= orderlist.size()-1;
@@ -180,6 +180,7 @@ public class SearchEngine {
         }
         return mid;
     }
+
     public int searchByIndexOrderValue(Double value, String var){
         variableSort(var, false);
         int low = 0;
