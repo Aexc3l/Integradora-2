@@ -241,11 +241,11 @@ class SearchEngineTest {
 		storeManager.addProduct("Pollo","Pollo Fresco",14.99,9,"Food");
 
 		// Act
-		String result = storeManager.searchProductsbyAmount(12);
+		String result = storeManager.searchProductsbyRange(12,50);
 		System.out.println(result);
 
 		// Assert
-		assertNotEquals("",result,"No hay ningun producto con esa cantidad");
+		assertEquals("[Product{name='Salchicha', description='Carne Embutida', price=10.99, quantity=10, category='Food', timesPurchased=0}, Product{name='Salchicha de Res', description='Carne Procesada', price=13.99, quantity=14, category='Basics', timesPurchased=0}]",result,"No hay ningun producto con esa cantidad");
 	}
 
 	@Test
@@ -261,7 +261,7 @@ class SearchEngineTest {
 		System.out.println(result);
 
 		// Assert
-		assertNotEquals("",result,"No hay ningun producto con esa cantidad");
+		assertEquals("[Product{name='Salchicha', description='Carne Embutida', price=10.99, quantity=10, category='Food', timesPurchased=0}, Product{name='Salchicha de Res', description='Carne Procesada', price=13.99, quantity=14, category='Basics', timesPurchased=0}]",result,"No hay ningun producto con esa cantidad");
 	}
 
 	@Test
