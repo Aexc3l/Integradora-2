@@ -234,7 +234,7 @@ class SearchEngineTest {
 
 	@Test
 	void searchProductsbyRangesetup1() {
-		/*/ Arrange
+		//Arrange
 		setUpStage1();
 		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
 		storeManager.addProduct("Salchicha de Res","Carne Procesada",13.99,14,"Basics");
@@ -246,7 +246,6 @@ class SearchEngineTest {
 
 		// Assert
 		assertEquals("[Product{name='Salchicha', description='Carne Embutida', price=10.99, quantity=10, category='Food', timesPurchased=0}, Product{name='Salchicha de Res', description='Carne Procesada', price=13.99, quantity=14, category='Basics', timesPurchased=0}]",result,"No hay ningun producto con esa cantidad");
-		*/
 	}
 
 	@Test
