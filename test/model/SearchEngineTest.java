@@ -60,7 +60,7 @@ class SearchEngineTest {
 			fail("Expected InvalidReferenceException to be thrown");
 		} catch (InvalidReferenceException e) {
 			// Assert
-			assertEquals("There are no products with this name yet", e.getMessage());
+			assertEquals("\nThere are no products with this name yet", e.getMessage());
 		}
 	}
 
@@ -100,7 +100,7 @@ class SearchEngineTest {
 			fail("Expected InvalidReferenceException to be thrown");
 		} catch (InvalidReferenceException e) {
 			// Assert
-			assertEquals("There are no products with this category yet", e.getMessage());
+			assertEquals("\nThere are no products with this category yet", e.getMessage());
 		}
 	}
 
@@ -139,7 +139,7 @@ class SearchEngineTest {
 			fail("Expected UnvalidPriceException to be thrown");
 		} catch (UnvalidPriceException e) {
 			// Assert
-			assertEquals("There are no products with this price", e.getMessage());
+			assertEquals("\nThere are no products with this price", e.getMessage());
 		}
 	}
 
@@ -160,7 +160,7 @@ class SearchEngineTest {
 		}
 
 		// Assert
-		assertEquals("Error: All products prices are higher than zero",result,"No se muestra ningun producto");
+		assertEquals("\nError: All products prices are higher than zero",result,"No se muestra ningun producto");
 	}
 
 	@Test
@@ -168,15 +168,22 @@ class SearchEngineTest {
 		// Arrange
 		setUpStage1();
 		storeManager.addProduct("Salchicha","Carne Embutida",10.99,10,"Food");
-		storeManager.addProduct("Salchicha de Res","Carne Procesada",12.99,14,"Basics");
+		storeManager.addProduct("Res","Carne Procesada",12.99,14,"Basics");
 		storeManager.addProduct("Pollo","Pollo Fresco",12.99,9,"Food");
+		ArrayList<String> products = new ArrayList<>();
+		products.add("Pollo");
+		products.add("Salchicha de Res");
+		products.add("Pollo");
+		products.add("Res");
+		products.add("Res");
 
+		storeManager.addOrder("Rodrigo",products);
 		// Act
-		String result = storeManager.searchProductsbyPurchasedAmount(129);
+		String result = storeManager.searchProductsbyPurchasedAmount(2);
 		System.out.println(result);
 
 		// Assert
-		assertEquals("",result,"Se muestran todos los productos menos Salchicha");
+		assertEquals("[Product{name='Res', description='Carne Procesada', price=12.99, quantity=12, category='Basics', timesPurchased=2}, Product{name='Pollo', description='Pollo Fresco', price=12.99, quantity=7, category='Food', timesPurchased=2}]",result,"Se muestran todos los productos menos Salchicha");
 	}
 
 	@Test

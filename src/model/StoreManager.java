@@ -57,16 +57,16 @@ public class StoreManager {
         for (String productName : productNames) {
             try {
                 Product product = getProductByName(productName);
-                orderedProducts.add(product);
                 if (getProductByName(productName) == null){
-                    throw new Exception("Product not found: " + productName);
+                    throw new Exception("\nProduct not found: " + productName);
+                }else {
+                    orderedProducts.add(product);
                 }
             } catch (Exception e) {
-                System.out.println("Product not found: " + productName);
+                System.out.println("\nProduct not found: " + productName);
             }
         }
-
-
+        updateProductQuantities(orderedProducts,1);
         Order order = new Order(buyerName, orderedProducts);
         orderList.add(order);
     }
@@ -74,7 +74,7 @@ public class StoreManager {
     public String searchProductsbyName(String value) throws InvalidReferenceException {
         ArrayList<Product> matchingProducts = searchEngine.searchByProductString(value, "name");
         if (matchingProducts.size() == 0){
-            throw new InvalidReferenceException("There are no products with this name yet");
+            throw new InvalidReferenceException("\nThere are no products with this name yet");
         }
         return matchingProducts.toString();
     }
@@ -83,7 +83,7 @@ public class StoreManager {
     public  String searchProductsbyCategory(String value) throws InvalidReferenceException{
         ArrayList<Product> matchingProducts = searchEngine.searchByProductString(value, "category");
         if (matchingProducts.size() == 0){
-            throw new InvalidReferenceException("There are no products with this category yet");
+            throw new InvalidReferenceException("\nThere are no products with this category yet");
         }else {
             return matchingProducts.toString();
         }
@@ -92,23 +92,29 @@ public class StoreManager {
     public String searchProductsbyPrice(double value) throws UnvalidPriceException {
         ArrayList<Product> matchingProducts = new ArrayList<>();
         if (value < -1){
-            return "Error: All products prices are higher than zero";
+            return "\nError: All products prices are higher than zero";
         }else {
             matchingProducts = searchEngine.searchByProductValue(value, "price");
             if (matchingProducts.size() == 0){
-                throw new UnvalidPriceException("There are no products with this price");
+                throw new UnvalidPriceException("\nThere are no products with this price");
             }else {
                 return matchingProducts.toString();
             }
         }
     }
 
-    public String searchProductsbyAmount(int value) {
-        return "";
+    public String searchProductsbyPurchasedAmount(int value) {
+        ArrayList<Product> matchingProducts = new ArrayList<>();
+        matchingProducts = searchEngine.searchByProductValue((double) value,"timesPurchased");
+        if (matchingProducts.size() == 0){
+            return "\nError: There are no products with this purchased Amount";
+        }else {
+            return matchingProducts.toString();
+        }
     }
 
-    public String searchProductsbyPurchasedAmount(int value) {
-        return null;
+    public String searchProductsbyAmount(int value) {
+        return "";
     }
 
     public String searchOrderbyName(String date) {
@@ -155,8 +161,7 @@ public class StoreManager {
 
     private void updateProductQuantities(
             ArrayList<Product> orderedProducts,
-            int option,
-            int increase
+            int option
     ) {
         for (Product product : orderedProducts) {
             int index = getProductIndexByName(product.getName());
