@@ -288,4 +288,7 @@ public class StoreManager {
             return null;
         }
     }
+    public ArrayList<Order> getOrderList() {
+        return orderList;
+    }
 }

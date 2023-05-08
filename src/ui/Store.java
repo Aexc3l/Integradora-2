@@ -2,6 +2,9 @@ package ui;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import exception.InvalidReferenceException;
+import exception.UnvalidPriceException;
 import model.StoreManager;
 
 public class Store {
@@ -15,12 +18,12 @@ public class Store {
         scan = new Scanner(System.in);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnvalidPriceException, InvalidReferenceException {
         System.out.println("<-----<| Welcome to MercadoLibre |>----->");
         mercaLibre.startMenu();
     }
 
-    private void startMenu() {
+    private void startMenu() throws UnvalidPriceException, InvalidReferenceException {
         boolean exitCase = false;
         boolean configCase = false;
 
@@ -142,7 +145,67 @@ public class Store {
 
     private void SearchOrder() {}
 
-    private void SearchProduct() {}
+    private void SearchProduct() throws UnvalidPriceException, InvalidReferenceException {
+        System.out.println("What do you want to search?,  \n1.A product \n2.an order ");
+        int option=scan.nextInt();
+        switch (option){
+            case 1:System.out.println("Do you want to search A product by: \n1.Its Name \n2.Its Value \n3.Its Category \n4.Its purchased amount \n5.Its amount \n6.a range of price");
+            int option2=scan.nextInt();
+            if(option2==1){
+                System.out.println("Enter the name of the product:");
+                String name = scan.nextLine();
+                System.out.println(storeManager.searchProductsbyName(name));
+
+            }if(option2==2){
+                System.out.println("Enter the product's value:");
+                double value = scan.nextDouble();
+                System.out.println(storeManager.searchProductsbyPrice(value));
+
+            }if(option2==3){
+                System.out.println("Enter the product's category:");
+                String category = scan.nextLine();
+                System.out.println(storeManager.searchProductsbyCategory(category));
+            }if(option2==4){
+                System.out.println("Enter the product's purchased amount:");
+                int purchasedAmount = scan.nextInt();
+                System.out.println(storeManager.searchProductsbyPurchasedAmount(purchasedAmount));
+            }if(option2==5){
+                System.out.println("Enter the product's amount:");
+                int amount = scan.nextInt();
+                System.out.println(storeManager.searchProductsbyAmount(amount));
+            }if(option==6){
+                System.out.println("Enter the product's min value:");
+                double min = scan.nextDouble();
+                System.out.println("Enter the product's max value:");
+                double max = scan.nextDouble();
+                System.out.println(storeManager.searchProductsbyRange(min,max));
+            }else{
+                System.out.println("Invalid option");
+            }
+            break;
+            case 2:
+            System.out.println("Do you want to search an order by: \n1.Its Name \n2.Its Date \n3.Its price");
+            int option3=scan.nextInt();
+            if(option3==1){
+                System.out.println("Enter the name of the order:");
+                String name2 = scan.nextLine();
+                System.out.println(storeManager.searchOrderbyName(name2));
+            }if(option3==2){
+                System.out.println("Enter the order's date:");
+                String date = scan.nextLine();
+                System.out.println(storeManager.searchOrderbyDate(date));
+            }if(option3==3){
+                System.out.println("Enter the order's price:");
+                double price = scan.nextDouble();
+                System.out.println(storeManager.searchOrderbyPrice(price));
+            }else{
+            System.out.println("Invalid option");
+            }
+            break;
+            default:System.out.println("invalid option");  
+        } 
+        
+    }
 
     private void importData() {
 
