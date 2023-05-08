@@ -29,10 +29,6 @@ public class StoreManager {
         searchEngine = new SearchEngine(storeData.getProducts(),storeData.getOrders());
     }
 
-    public void initializeSearching(){
-        searchEngine = new SearchEngine(storeData.getProducts(),storeData.getOrders());
-    }
-
     public void addProduct(
             String name,
             String description,
@@ -173,7 +169,8 @@ public class StoreManager {
             this.storeData = dataManager.importData(fileName, storeData);
             this.productList = storeData.getProducts();
             this.orderList = storeData.getOrders();
-            initializeSearching();
+            this.searchEngine.setOrderlist(storeData.getOrders());
+            this.searchEngine.setProductList(storeData.getProducts());
             return true;
         } catch (FileNotFoundException ex) {
             System.out.println("\nThe file was not found.\n");

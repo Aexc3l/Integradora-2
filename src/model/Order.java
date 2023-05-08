@@ -17,6 +17,7 @@ public class Order{
         this.productList = productList;
         this.totalPrice = 0;
         this.date = Calendar.getInstance();
+        calculateTotalPrice(productList);
     }
 
     public String getBuyerName() {
@@ -45,5 +46,13 @@ public class Order{
 
     public Calendar getDate() {
         return date;
+    }
+
+    @Override
+    public String toString() {
+        return  "\nBuyerName='" + buyerName + "\n" +
+                "ProductList=" + productList + "\n" +
+                "TotalPrice=" + totalPrice +
+                "\nDate=" + date.getTime() + "\n";
     }
 }
